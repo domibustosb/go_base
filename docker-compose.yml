@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+    web:
+        container_name: go-base-service
+        build:
+            context: ./
+            target: dev
+            dockerfile: ./docker/go/Dockerfile
+        ports:
+            - 8080:8080
+        volumes:
+            - .:/go/src/github.com/domibustosb/go_base
+        env_file:
+            - ./config/dev.env
