@@ -9,6 +9,22 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL=C
 ENV LANGUAGE en_US.UTF-8
 
+FROM base as migration
+
+COPY . .
+
+RUN pwd && cd cmd/base/migration && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+      -ldflags='-w -s -extldflags "-static"' -a \
+      -o /go/bin/migration .
+
+ENV USER=base
+
+RUN addgroup --gid 1001 --system $USER && adduser -u 1001 --system $USER --gid 1001
+
+RUN chown $USER:$USER /go/bin/migration -R
+
+ENTRYPOINT ["/go/bin/migration"]
+
 FROM base AS dev
 # application and watches for changes - ONLY development
 ARG FRESHER_VERSION=1.2.1
