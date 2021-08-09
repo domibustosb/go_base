@@ -14,7 +14,7 @@ func init() {
 func upBaseSchema(tx *sql.Tx) error {
 	// This code is executed when the migration is applied.
 	_, err := tx.Exec(`
-		INSERT INTO public.animes (id, name, created_at, updated_at) values (1, 'one piece', now(),now());
+		INSERT INTO public.animes (name, created_at, updated_at) values ('one piece', now(),now());
 	`)
 	if err != nil {
 		log.Println("Error: ", err.Error())
